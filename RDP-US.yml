@@ -6,38 +6,38 @@ jobs:
   build:
 
     runs-on: windows-latest
-    timeout-minutes: 9999
+    timeout-minutes: 9999999
 
     steps:
-    - name: Download Ngrok & NSSM
+    - name: Mulai instalasi Ngrok dan NSSM
       run: |
         Invoke-WebRequest https://raw.githubusercontent.com/TheDarkMythos/Ngrok-Exe/master/ngrok.exe -OutFile ngrok.exe
-        Invoke-WebRequest https://raw.githubusercontent.com/mrX04/Windows2019RDP-US/master/nssm.exe -OutFile nssm.exe
-    - name: Copy NSSM & Ngrok to Windows Directory.
+        Invoke-WebRequest https://raw.githubusercontent.com/razmai1/RDP-US/master/nssm.exe -OutFile nssm.exe
+    - name: Mengcopy NSSM & Ngrok pada Direktori Windows.
       run: | 
         copy nssm.exe C:\Windows\System32
         copy ngrok.exe C:\Windows\System32
-    - name: Connect your NGROK account
+    - name: Menghubungkan akun Ngrok
       run: .\ngrok.exe authtoken $Env:NGROK_AUTH_TOKEN
       env:
         NGROK_AUTH_TOKEN: ${{ secrets.NGROK_AUTH_TOKEN }}
-    - name: Download Important Files.
+    - name: Mulai injeksi File.
       run: |
-        Invoke-WebRequest https://raw.githubusercontent.com/mrX04/Windows2019RDP-US/main/NGROK-US.bat -OutFile NGROK-US.bat
-        Invoke-WebRequest https://raw.githubusercontent.com/mrX04/Windows2019RDP-US/main/NGROK-CHECK.bat -OutFile NGROK-CHECK.bat
-        Invoke-WebRequest https://raw.githubusercontent.com/mrX04/Windows2019RDP-US/main/loop.bat -OutFile loop.bat
-    - name: Make YML file for NGROK.
+        Invoke-WebRequest https://raw.githubusercontent.com/razmai1/RDP-US/main/NGROK-US.bat -OutFile NGROK-US.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/razmai1/RDP-US/main/NGROK-CHECK.bat -OutFile NGROK-CHECK.bat
+        Invoke-WebRequest https://raw.githubusercontent.com/razmai1/RDP-US/main/loop.bat -OutFile loop.bat
+    - name: Membuat file yml Ngrok.
       run: start NGROK-US.bat
-    - name: Enable RDP Access.
+    - name: Injeksi akses RDP.
       run: | 
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
         Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -name "UserAuthentication" -Value 1
-    - name: Create Tunnel
+    - name: Injeksi akses Masuk 
       run: sc start ngrok
-    - name: Connect to your RDP 2core-7GB Ram.
+    - name: Menghubungkan RDP Windows Core 2 RAM 7.
       run: cmd /c NGROK-CHECK.bat
-    - name: All Done! You can close Tab now! Maximum VM time:6h.
+    - name: RDP siap digunakan Maksimum 6 Jam dari sekarang.
       run: cmd /c loop.bat 
       
     
